@@ -3,11 +3,15 @@ import { Section } from './Section/Section';
 import { PhoneForm } from './PhonebookForm/PhonebookForm';
 import { ContactsList } from './ContactsList/ContactsList';
 import { Filter } from './Filter/Filter';
+import { useDispatch } from 'react-redux';
+import { contactAdd } from '../redux/action';
 
 export function App() {
   const [contacts, setcontacts] = useState([]);
   const [filter, setfilter] = useState('');
   const prevContacts = useRef(contacts);
+  const dispatch = useDispatch();
+  console.log(dispatch);
 
   useEffect(() => {
     const getContacts = JSON.parse(localStorage.getItem('contacts'));
@@ -32,6 +36,7 @@ export function App() {
     }
 
     setcontacts([...contacts, contact]);
+    dispatch(contactAdd(contact));
   };
 
   const handlerChangeFilter = ({ target }) => {

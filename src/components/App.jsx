@@ -1,32 +1,32 @@
-import { useEffect, useRef, useState } from 'react';
 import { Section } from './Section/Section';
 import { PhoneForm } from './PhonebookForm/PhonebookForm';
 import { ContactsList } from './ContactsList/ContactsList';
 import { Filter } from './Filter/Filter';
-import { useDispatch } from 'react-redux';
-import { contactAdd } from '../redux/action';
+import { useDispatch, useSelector } from 'react-redux';
+import { contactAdd, removeContact, filterAction } from '../redux/action';
 
 export function App() {
-  const [contacts, setcontacts] = useState([]);
-  const [filter, setfilter] = useState('');
-  const prevContacts = useRef(contacts);
+  // const [contacts, setcontacts] = useState([]);
+  // const [filter, setfilter] = useState('');
+  // const prevContacts = useRef(contacts);
   const dispatch = useDispatch();
-  console.log(dispatch);
+  const contacts = useSelector(({ contacts }) => contacts);
+  const filter = useSelector(({ filter }) => filter);
 
-  useEffect(() => {
-    const getContacts = JSON.parse(localStorage.getItem('contacts'));
+  // useEffect(() => {
+  //   const getContacts = JSON.parse(localStorage.getItem('contacts'));
 
-    if (getContacts) {
-      setcontacts(getContacts);
-    }
-  }, []);
+  //   if (getContacts) {
+  //     setcontacts(getContacts);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    if (contacts !== prevContacts.current) {
-      localStorage.setItem('contacts', JSON.stringify(contacts));
-      prevContacts.current = contacts;
-    }
-  }, [contacts]);
+  // useEffect(() => {
+  //   if (contacts !== prevContacts.current) {
+  //     localStorage.setItem('contacts', JSON.stringify(contacts));
+  //     prevContacts.current = contacts;
+  //   }
+  // }, [contacts]);
 
   const addContact = contact => {
     const result = contacts.find(({ name }) => name === contact.name);
@@ -35,12 +35,14 @@ export function App() {
       return;
     }
 
-    setcontacts([...contacts, contact]);
+    // setcontacts([...contacts, contact]);
     dispatch(contactAdd(contact));
   };
 
   const handlerChangeFilter = ({ target }) => {
-    setfilter(target.value);
+    // setfilter(target.value);
+
+    dispatch(filterAction(target.value));
   };
 
   const findByName = () => {
@@ -50,7 +52,8 @@ export function App() {
   };
 
   const deleteContact = contactId => {
-    setcontacts(contacts.filter(({ id }) => id !== contactId));
+    // setcontacts(contacts.filter(({ id }) => id !== contactId));
+    dispatch(removeContact(contacts.filter(({ id }) => id !== contactId)));
   };
 
   return (

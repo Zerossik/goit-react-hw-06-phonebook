@@ -3,8 +3,11 @@ import { PhoneForm } from './PhonebookForm/PhonebookForm';
 import { ContactsList } from './ContactsList/ContactsList';
 import { Filter } from './Filter/Filter';
 import { useDispatch, useSelector } from 'react-redux';
-import { contactAdd, removeContact, filterAction } from '../redux/action';
-
+import {
+  addContactAction,
+  filterAction,
+  removeContactAction,
+} from 'redux/phoneBookSlice';
 export function App() {
   const dispatch = useDispatch();
   const contacts = useSelector(({ contacts }) => contacts); // получаем значение стейта - contacts
@@ -17,12 +20,7 @@ export function App() {
       alert('Rosie Simpson is already in contacts');
       return;
     }
-    dispatch(contactAdd(contact)); // отправляет объект с контактом в store
-  };
-
-  const handlerChangeFilter = ({ target }) => {
-    // отправляем значение с инпута в store/state filter .
-    dispatch(filterAction(target.value));
+    dispatch(addContactAction(contact)); // отправляет объект с контактом в store
   };
 
   const findByName = () => {
@@ -31,19 +29,19 @@ export function App() {
     );
   };
 
-  const deleteContact = contactId => {
-    // удаляем контакт по ID
-    dispatch(removeContact(contacts.filter(({ id }) => id !== contactId)));
-  };
-
   return (
     <Section title={'Phonebook'}>
       <PhoneForm addContact={addContact} />
-      <Filter filter={filter} handlerChangeFilter={handlerChangeFilter} />
+      <Filter
+        filter={filter}
+        handlerChangeFilter={({ target }) =>
+          dispatch(filterAction(target.value))
+        }
+      />
       <ContactsList
         title={contacts.length === 0 ? 'Phone book is empty' : 'Contacts'}
         contacts={findByName}
-        deleteContact={deleteContact}
+        deleteContact={contactId => dispatch(removeContactAction(contactId))}
       />
     </Section>
   );

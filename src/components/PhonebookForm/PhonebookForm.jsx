@@ -1,16 +1,21 @@
 import { useState } from 'react';
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
+
 import {
   FormButton,
   Input,
   StyledLabel,
   Required,
 } from './PhonebookForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContactAction } from 'redux/phoneBookSlice';
 
-export function PhoneForm({ addContact }) {
+export function PhoneForm() {
   const [name, setname] = useState('');
   const [number, setnumber] = useState('');
+
+  const dispatch = useDispatch();
+  const contacts = useSelector(({ contacts }) => contacts); // получаем значение стейта - contacts
 
   const handlerChange = ({ target: { name, value } }) => {
     switch (name) {
@@ -22,6 +27,15 @@ export function PhoneForm({ addContact }) {
         break;
       default:
     }
+  };
+  const addContact = contact => {
+    //Добавляем контает, если контакта с таким именем не существует.
+    const result = contacts.find(({ name }) => name === contact.name);
+    if (result) {
+      alert('Rosie Simpson is already in contacts');
+      return;
+    }
+    dispatch(addContactAction(contact)); // отправляет объект с контактом в store
   };
 
   const handlerSubmit = evt => {
@@ -72,7 +86,3 @@ export function PhoneForm({ addContact }) {
     </form>
   );
 }
-
-PhoneForm.propTypes = {
-  addContact: PropTypes.func.isRequired,
-};

@@ -6,7 +6,6 @@ import { reducer } from './reducer';
 const persistConfig = {
   key: 'contacts',
   storage,
-  // blackist: ['filter'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

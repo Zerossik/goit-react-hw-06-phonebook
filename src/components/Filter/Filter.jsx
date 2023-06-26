@@ -1,6 +1,10 @@
-import PropTypes from 'prop-types';
 import { Input } from 'components/PhonebookForm/PhonebookForm.styled';
-export function Filter({ filter, handlerChangeFilter }) {
+import { useDispatch, useSelector } from 'react-redux';
+import { filterAction } from 'redux/phoneBookSlice';
+export function Filter() {
+  const dispatch = useDispatch();
+  const filter = useSelector(({ filter }) => filter); // получаем значение стейта - filter
+
   return (
     <label>
       Find Contacts by name
@@ -9,13 +13,8 @@ export function Filter({ filter, handlerChangeFilter }) {
         type="text"
         name="filter"
         value={filter}
-        onChange={handlerChangeFilter}
+        onChange={({ target }) => dispatch(filterAction(target.value))}
       />
     </label>
   );
 }
-
-Filter.propTypes = {
-  filter: PropTypes.string.isRequired,
-  handlerChangeFilter: PropTypes.func.isRequired,
-};

@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types';
 import { ContactListItem } from './ContactListItem';
 import { List } from './ContactsList.styled';
 import { useSelector } from 'react-redux';
 
-export function ContactsList({ title }) {
+export function ContactsList() {
   const filter = useSelector(({ filter }) => filter); // получаем значение стейта - filter
   const contacts = useSelector(({ contacts }) => contacts); // получаем значение стейта - contacts
   const findByName = () => {
@@ -13,13 +12,10 @@ export function ContactsList({ title }) {
   };
   return (
     <List>
-      <h2>{title}</h2>
+      <h2>{contacts.length === 0 ? 'Phone book is empty' : 'Contacts'}</h2>
       {findByName().map(({ id, name, number }) => (
         <ContactListItem name={name} number={number} key={id} id={id} />
       ))}
     </List>
   );
 }
-ContactsList.propTypes = {
-  title: PropTypes.string.isRequired,
-};

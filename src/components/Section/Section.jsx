@@ -10,5 +10,5 @@ export function Section({ children }) {
   );
 }
 Section.propTypes = {
-  title: PropTypes.string.isRequired,
+  children: PropTypes.arrayOf(PropTypes.shape().isRequired).isRequired,
 };
